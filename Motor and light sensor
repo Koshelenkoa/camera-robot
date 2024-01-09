@@ -1,0 +1,88 @@
+#include <Servo.h>
+
+Servo leftServo;
+Servo rightServo;
+
+int light = 0; // store the current light value
+
+void setup() {
+    // put your setup code here, to run once:
+    Serial.begin(9600); //configure  serial to talk to computer
+    pinMode(9, OUTPUT); // configure digital pin  13 as an output
+    pinMode(A0, INPUT); // configure digital pin 12 as an output
+    leftServo.attach(10);
+    rightServo.attach(11);
+}
+
+void  loop() {
+    // put your main code here, to run repeatedly:
+    light = analogRead(A0);  // read and save value from PR
+ 
+    if(light > 450) { // If it is bright...
+
+        digitalWrite(9,LOW); //turn left LED off
+    }
+    else if(light > 50 && light < 451) { // If  it is average light...
+       digitalWrite(9, LOW); // turn left LED on
+    }
+    else { // If it's dark...
+
+        digitalWrite(9,HIGH); // Turn left LED on
+
+    }
+    delay(1000); // don't spam the computer!
+
+    if (Serial.available() > 0) 
+{
+    char command = Serial.read();
+
+    // Execute different commands based on received characters
+    if (command == 'w') {
+      moveForward();
+    } else if (command == 's') {
+      moveBackward();
+    } else if (command == 'a') {
+      moveLeft();
+    } else if (command == 'd') {
+      moveRight();
+    } else if (command == 'x') {
+      stopMoving();
+    }
+    // Add more conditions for other commands as needed
+  }
+
+}
+
+void moveForward() 
+{
+  leftServo.write(180);
+  rightServo.write(180);
+  delay(100);
+}
+
+void moveBackward() 
+{
+  leftServo.write(0);
+  rightServo.write(0);
+}
+
+void moveLeft() 
+{
+  leftServo.write(90);
+  rightServo.write(180);
+  delay(100);
+}
+
+void moveRight() 
+{
+  leftServo.write(180);
+  rightServo.write(90);
+  delay(100);
+}
+
+void stopMoving() 
+{
+  leftServo.write(90); // Set servos to stop position
+  rightServo.write(90);
+  delay(100);
+}
