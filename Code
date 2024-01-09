@@ -4,14 +4,16 @@
 Servo leftServo;
 Servo rightServo;
 
-void setup() {
+void setup() 
+{
   Serial.begin(9600);
   leftServo.attach(9);
   rightServo.attach(10);
 }
 
 void loop() {
-  if (Serial.available() > 0) {
+  if (Serial.available() > 0) 
+{
     char command = Serial.read();
 
     // Execute different commands based on received characters
@@ -30,30 +32,35 @@ void loop() {
   }
 }
 
-void moveForward() {
+void moveForward() 
+{
   leftServo.write(180);
   rightServo.write(180);
   delay(100);
 }
 
-void moveBackward() {
+void moveBackward() 
+{
   leftServo.write(0);
   rightServo.write(0);
 }
 
-void moveLeft() {
+void moveLeft() 
+{
   leftServo.write(90);
   rightServo.write(180);
   delay(100);
 }
 
-void moveRight() {
+void moveRight() 
+{
   leftServo.write(180);
   rightServo.write(90);
   delay(100);
 }
 
-void stopMoving() {
+void stopMoving() 
+{
   leftServo.write(90); // Set servos to stop position
   rightServo.write(90);
   delay(100);
