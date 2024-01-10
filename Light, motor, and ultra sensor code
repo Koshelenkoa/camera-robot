@@ -1,0 +1,122 @@
+int light = 0; // store the current light value
+const int trigPin = 12;
+const int echoPin = 13;
+long duration;
+int distance;
+
+void setup() {
+    pinMode(9, OUTPUT); // light
+    pinMode(A0, INPUT);
+    pinMode(7, OUTPUT);
+
+    pinMode (6 ,OUTPUT);//motors
+    pinMode (5 ,OUTPUT);
+    pinMode (4 ,OUTPUT);
+    pinMode (3 ,OUTPUT);
+    Serial.begin(9600);
+
+    pinMode(trigPin, OUTPUT); // ultrasonic
+    pinMode(echoPin, INPUT);
+   
+}
+
+void  loop() {
+  //light
+    light = analogRead(A0);  // read and save value from PR
+ 
+    if(light > 75) { // If it is bright...
+       
+        digitalWrite(9,LOW); //turn left LED off
+        digitalWrite(7,LOW);
+    }
+   
+    else { // If it's dark...
+        digitalWrite(9,HIGH);
+        digitalWrite(7,HIGH); // Turn left LED on
+        }
+       
+    delay(1000); // don't spam the computer!
+
+    //motors
+    if (Serial.available() > 0) {
+     Serial.write("available");
+     
+    char command = Serial.read();
+     Serial.write(command);
+
+    // Execute different commands based on received characters
+    if (command == 'w') {
+      forward();
+    } else if (command == 's') {
+      backward();
+    } else if (command == 'a') {
+      left();
+    } else if (command == 'd') {
+      right();
+    } else if (command == 'x') {
+      stop();
+    }
+   }
+   
+    //Ultra wavesensor
+    digitalWrite(trigPin, LOW);
+    delayMicroseconds(2);
+    // Sets the trigPin on HIGH state for 10 micro seconds
+    digitalWrite(trigPin, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trigPin, LOW);
+    // Reads the echoPin, returns the sound wave travel time in microseconds
+    duration = pulseIn(echoPin, HIGH);
+    // Calculating the distance
+    distance = duration * 0.034 / 2;
+    // Prints the distance on the Serial Monitor
+    Serial.print("Distance: ");
+    Serial.println(distance);
+  }
+
+
+   void forward()
+  {
+  digitalWrite(6,HIGH);
+  digitalWrite(5,LOW);
+  digitalWrite(4,HIGH);
+  digitalWrite(3,LOW);
+  delay (1000);
+  }
+ 
+  void right()
+  {
+  digitalWrite(6,LOW);
+  digitalWrite(5,HIGH);
+  digitalWrite(4,HIGH);
+  digitalWrite(3,LOW);
+  delay (1000);
+  }
+ 
+  void left()
+  {
+  digitalWrite(6,HIGH);
+  digitalWrite(5,LOW);
+  digitalWrite(4,LOW);
+  digitalWrite(3,HIGH);
+  delay (1000);
+  }
+ 
+  void backward()
+  {
+  digitalWrite(6,LOW);
+  digitalWrite(5,HIGH);
+  digitalWrite(4,LOW);
+  digitalWrite(3,HIGH);
+  delay (1000);
+  }
+ 
+  void stop()
+  {
+  digitalWrite(6,LOW);
+  digitalWrite(5,LOW);
+  digitalWrite(4,LOW);
+  digitalWrite(3,LOW);
+  delay (1000);
+  }
+
